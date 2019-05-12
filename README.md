@@ -4,6 +4,8 @@ It uses .ppm image format (you can google image viewers for your OS)
 
 ## Make  
 There is a makefile, so `make` should do it  
+No additional libs required. No OpenGl, no windows/linux os libraries, no image libraries  
+Only C++ with C++11 (may be C++14?) support
 
 ## Usage  
 There is a main class called `RayTracer`. It has several main options  
