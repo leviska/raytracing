@@ -1,0 +1,6 @@
+*.o
+*.ppm
+#very large size
+ply/teapot.ply
+#binary
+raytracing

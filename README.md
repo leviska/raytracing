@@ -22,3 +22,7 @@ This was tested with teapot model
 ## Motivation  
 The main idea is that this must use no libraries outside standart, and be os independent  
 That's why it calculating on CPU (because you need OpenGL for GPU), using .ppm images (because it easy to implement with no libs)  
+
+## Examples
+![scene1](https://github.com/Masafi/raytracing/raw/master/examples/scene1.jpg)
+![scene2](https://github.com/Masafi/raytracing/raw/master/examples/scene2.jpg)
