@@ -1,7 +1,6 @@
 # Ray tracing  
 This is pure C++ CPU ray tracing, with no additional libraries, only standart  
-It uses .ppm image format, which is basic bitmap with near no header (you can google image viewers for your OS)  
-I use binary method to save at least some disk space
+It uses .ppm image format (you can google image viewers for your OS)  
 
 ## Make  
 There is a makefile, so `make` should do it  
@@ -21,7 +20,7 @@ This was tested with teapot model
 
 ## Motivation  
 The main idea is that this must use no libraries outside standart, and be os independent  
-That's why it calculating on CPU (because you need OpenGL for GPU), using .ppm images (because it easy to implement with no libs)  
+That's why it calculating on CPU (because you need OpenGL for GPU), using .ppm images, which is basic bitmap with near no header: it's easy to implement with no libs. I use binary file format to save at least some of the disk space 
 
 ## Examples
 ![scene1](https://github.com/Masafi/raytracing/raw/master/examples/scene1.jpg)
