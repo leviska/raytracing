@@ -5,10 +5,10 @@
 
 #include <iostream>
 #include <vector>
-#include <ctime>
+#include <chrono>
 
-const int W = 1920;
-const int H = 1080;
+const int W = 800;
+const int H = 600;
 
 void generateScene1(RayTracing& tracer) {
 	GeometryPrimitive* obj;
@@ -94,16 +94,16 @@ int main() {
 	tracer.antialiasing = 4;
 
 	for (int i = 0; i < 1; i++) {
-		clock_t start = clock();
+		std::string fileName = "image" + std::string(i < 10 ? "0" : "") + std::to_string(i) + ".ppm";
+		auto started = std::chrono::high_resolution_clock::now();
 
 		Image res = tracer.rayTracing();
-		std::string t = (i < 10 ? "0" : "");
-		res.save("image" + t + std::to_string(i) + ".ppm");
+		res.save("result/" + fileName);
 
-		std::cout << "Ended " << i << " image\n";
-
-		clock_t end = clock();
-		std::cout << double(end - start) / CLOCKS_PER_SEC << std::endl;
+		auto done = std::chrono::high_resolution_clock::now();
+		std::cout << "Ended " << fileName << " in ";
+		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(done-started).count() / 1000.0;
+		std::cout << " seconds" << std::endl;
 	}
 
 	return 0;

@@ -22,6 +22,7 @@ IntersectData RayTracing::intersect(const Line & ray) {
 }
 
 Color RayTracing::singleRay(const Line & ray, int iter) {
+
 	//Checking for intersection with objects
 	IntersectData res = intersect(ray);
 
@@ -130,7 +131,7 @@ void RayTracing::rayTracingRange(int from, int to, Image * res) {
 	}
 }
 
-RayTracing::RayTracing() : camera(), objects(), lights() {
+RayTracing::RayTracing() : objects(), lights(), camera() {
 	antialiasing = 1;
 }
 
@@ -171,9 +172,9 @@ Image RayTracing::rayTracing() {
 		}
 
 		//Temp output
-		//It is taking time actually, so removing it will increase speed
 		std::cout << "Ended " << t << "/" << screenSize << " (" << (t * 100 / screenSize) << "%)\n";
-		//res.save("imageTemp.ppm");
+		//It is taking time actually, so removing it will increase speed
+		//res.save("result/imageTemp.ppm");
 	}
 
 	return res;

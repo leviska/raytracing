@@ -1,6 +1,7 @@
 *.o
 *.ppm
+Debug
+Release
+result/*
 #very large size
 ply/teapot.ply
-#binary
-raytracing
