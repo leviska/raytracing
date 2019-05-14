@@ -99,8 +99,12 @@ Color RayTracing::singleRay(const Line & ray, int iter) {
 
 void RayTracing::rayTracingRange(int from, int to, Image * res) {
 	int screenSize = camera.resWidth * camera.resHeight / 2;
+
+
+	//Getting "top" and "right" direction
+	//TODO: rotating
 	Vector top(0, 0, 1);
-	top = (top - (camera.dir * (top * camera.dir))).makeUnit() * camera.height / camera.resHeight;
+	top = (top - (camera.dir * (top * camera.dir / (camera.dir() * camera.dir())))).makeUnit() * camera.height / camera.resHeight;
 	Vector right = (camera.dir / top).makeUnit() * camera.width / camera.resWidth;
 	//Going over all pixels in range
 	for (int t = from; t < to; t++) {
@@ -117,7 +121,6 @@ void RayTracing::rayTracingRange(int from, int to, Image * res) {
 		for (int ti = 0; ti < camera.antialiasing; ti++) {
 			for (int tj = 0; tj < camera.antialiasing; tj++) {
 				//Get ray
-				//TODO: rotating
 				Vector p = camera.dir +
 					top * (j - camera.resHeight / 2 + double(tj) / camera.antialiasing) +
 					right * (i - camera.resWidth / 2 + double(ti) / camera.antialiasing);
@@ -159,6 +162,7 @@ Image RayTracing::rayTracing() {
 
 	//Threading and raytracing
 	int threadsCount = std::max(1U, std::thread::hardware_concurrency());
+	threadsCount = 1;
 	std::cout << "Detected " << threadsCount << " threads\n";
 
 	int dif = PIXELS_PER_THREAD / camera.antialiasing;
@@ -184,7 +188,7 @@ Image RayTracing::rayTracing() {
 		//Temp output
 		std::cout << "Ended " << t << "/" << screenSize << " (" << (t * 100 / screenSize) << "%)\n";
 		//It is taking time actually, so removing it will increase speed
-		//res.save("result/imageTemp.ppm");
+		res.save("result/imageTemp.ppm");
 	}
 
 	return res;

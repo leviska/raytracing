@@ -1,11 +1,11 @@
 <cameras>
 	<camera
 		centerX="0"
-		centerY="-3"
-		centerZ="0"
+		centerY="-1"
+		centerZ="-1"
 		dirX="0"
-		dirY="3"
-		dirZ="0"
+		dirY="1"
+		dirZ="1"
 		resWidth="800"
 		resHeight="450"
 		width="8"
