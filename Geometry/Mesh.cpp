@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Plane.h"
 #include "../PLY.h"
 
 #include <cmath>
@@ -20,11 +21,6 @@ Vertex::Vertex(Vector _pos, Color _color) {
 
 //-------------------------------------------
 //Axis-Aligned Cuboid
-
-CuboidAA::CuboidAA() {
-	material = Material::None;
-	doubleSided = false;
-}
 
 CuboidAA::CuboidAA(Vector _a, Vector _b) {
 	a = _a;
@@ -69,10 +65,6 @@ IntersectData CuboidAA::intersect(const CuboidAA & s) {
 	return res;
 }
 
-void CuboidAA::precalc() {
-
-}
-
 
 //-------------------------------------------
 //TriangleMesh
@@ -108,7 +100,7 @@ Vector TriangleMesh::getBarycentric(Vector p) const {
 }
 
 int sign(double v) {
-	return (abs(v) < eps ? 0 : (v < 0 ? -1 : 1));
+	return (std::abs(v) < eps ? 0 : (v < 0 ? -1 : 1));
 }
 
 IntersectData TriangleMesh::intersect(const Line & line) {
@@ -125,7 +117,7 @@ IntersectData TriangleMesh::intersect(const Line & line) {
 			if (sgn == 0) {
 				sgn = cur;
 			}
-			if(sgn * cur < 0) {
+			if (sgn * cur < 0) {
 				inside = false;
 			}
 		}
@@ -142,6 +134,9 @@ IntersectData TriangleMesh::intersect(const Line & line) {
 }
 
 void TriangleMesh::precalc() {
+}
+
+void TriangleMesh::initFromNode(const XML::Node* node) {
 }
 
 
@@ -332,7 +327,7 @@ void Mesh::precalc() {
 			bool good = 1;
 			for (int k = j + 1; k < normals[i].size(); k++) {
 				Vector& b = normals[i][k];
-				if (abs(b.x - a.x) < eps && abs(b.y - a.y) < eps && abs(b.z - a.z) < eps) {
+				if (std::abs(b.x - a.x) < eps && std::abs(b.y - a.y) < eps && std::abs(b.z - a.z) < eps) {
 					good = 0;
 					break;
 				}
@@ -394,4 +389,15 @@ void Mesh::precalc() {
 			}
 		}
 	}
+}
+
+void Mesh::initFromNode(const XML::Node* node) {
+	GeometryPrimitive::initFromNode(node);
+	std::string fileName = node->attr("file");
+	loadFromFile(fileName);
+	Vector shift;
+	shift.x = node->attrd("shiftX");
+	shift.y = node->attrd("shiftY");
+	shift.z = node->attrd("shiftZ");
+	move(shift);
 }

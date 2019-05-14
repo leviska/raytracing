@@ -99,7 +99,9 @@ Color RayTracing::singleRay(const Line & ray, int iter) {
 
 void RayTracing::rayTracingRange(int from, int to, Image * res) {
 	int screenSize = camera.resWidth * camera.resHeight / 2;
-
+	Vector top(0, 0, 1);
+	top = (top - (camera.dir * (top * camera.dir))).makeUnit() * camera.height / camera.resHeight;
+	Vector right = (camera.dir / top).makeUnit() * camera.width / camera.resWidth;
 	//Going over all pixels in range
 	for (int t = from; t < to; t++) {
 		int v;
@@ -112,13 +114,14 @@ void RayTracing::rayTracingRange(int from, int to, Image * res) {
 		int j = v % camera.resHeight;
 
 		int r = 0, g = 0, b = 0;
-		for (int ti = 0; ti < antialiasing; ti++) {
-			for (int tj = 0; tj < antialiasing; tj++) {
+		for (int ti = 0; ti < camera.antialiasing; ti++) {
+			for (int tj = 0; tj < camera.antialiasing; tj++) {
 				//Get ray
-				Vector p(i - camera.resWidth / 2 + double(ti) / antialiasing, 0, j - camera.resHeight / 2 + double(tj) / antialiasing);
-				p.x *= camera.width / camera.resWidth;
-				p.z *= camera.height / camera.resHeight;
-				p = (p + camera.dir).makeUnit();
+				//TODO: rotating
+				Vector p = camera.dir +
+					top * (j - camera.resHeight / 2 + double(tj) / camera.antialiasing) +
+					right * (i - camera.resWidth / 2 + double(ti) / camera.antialiasing);
+				p = p.makeUnit();
 
 				//Sending the ray
 				Color tmp = singleRay(Line(camera.center, p));
@@ -127,17 +130,24 @@ void RayTracing::rayTracingRange(int from, int to, Image * res) {
 				b += tmp.b;
 			}
 		}
-		res->set(i, camera.resHeight - j - 1, Color(r / (antialiasing * antialiasing), g / (antialiasing * antialiasing), b / (antialiasing * antialiasing)));
+		res->set(
+			i,
+			camera.resHeight - j - 1,
+			Color(
+				r / (camera.antialiasing * camera.antialiasing),
+				g / (camera.antialiasing * camera.antialiasing),
+				b / (camera.antialiasing * camera.antialiasing)
+			)
+		);
 	}
 }
 
 RayTracing::RayTracing() : objects(), lights(), camera() {
-	antialiasing = 1;
 }
 
 Image RayTracing::rayTracing() {
 	int screenSize = camera.resWidth * camera.resHeight;
-	antialiasing = std::max(antialiasing, 1);
+	camera.antialiasing = std::max(camera.antialiasing, 1);
 
 	//Creating an image
 	Image res(camera.resWidth, camera.resHeight);
@@ -151,7 +161,7 @@ Image RayTracing::rayTracing() {
 	int threadsCount = std::max(1U, std::thread::hardware_concurrency());
 	std::cout << "Detected " << threadsCount << " threads\n";
 
-	int dif = PIXELS_PER_THREAD / antialiasing;
+	int dif = PIXELS_PER_THREAD / camera.antialiasing;
 	if (dif * threadsCount > screenSize) {
 		dif = screenSize / threadsCount + 1;
 	}

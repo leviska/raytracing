@@ -19,7 +19,7 @@ IntersectData Plane::intersect(const Line & line) {
 	double a = (center - line.org) * normal;
 	double b = line.dir * normal;
 	IntersectData data;
-	if (abs(b) > eps) {
+	if (std::abs(b) > eps) {
 		double k = a / b;
 		if (k >= 0) {
 			if (edge() > 0) {
@@ -28,7 +28,7 @@ IntersectData Plane::intersect(const Line & line) {
 				Vector dif = point - center;
 				double a = dif * edge / edge();
 				double b = dif * prp / prp();
-				if (abs(a) <= edge() && abs(b) <= edge()) {
+				if (std::abs(a) <= edge() && std::abs(b) <= edge()) {
 					data.koef = k;
 					data.normal = normal;
 					data.color = Color(250, 250, 250);
@@ -45,4 +45,17 @@ IntersectData Plane::intersect(const Line & line) {
 }
 
 void Plane::precalc() {
+}
+
+void Plane::initFromNode(const XML::Node* node) {
+	GeometryPrimitive::initFromNode(node);
+	center.x = node->attrd("centerX");
+	center.y = node->attrd("centerY");
+	center.y = node->attrd("centerZ");
+	normal.x = node->attrd("normalX");
+	normal.y = node->attrd("normalY");
+	normal.z = node->attrd("normalZ");
+	edge.x = node->attrd("edgeX");
+	edge.y = node->attrd("edgeY");
+	edge.z = node->attrd("edgeZ");
 }

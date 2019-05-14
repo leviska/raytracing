@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector.h"
-#include "Image.h"
+#include "Utils/Image.h"
 
 struct Material {
 	Vector ambient;

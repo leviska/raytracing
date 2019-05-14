@@ -12,4 +12,6 @@ public:
 	virtual IntersectData intersect(const Line & line) override;
 
 	virtual void precalc() override;
+
+	virtual void initFromNode(const XML::Node* node) override;
 };

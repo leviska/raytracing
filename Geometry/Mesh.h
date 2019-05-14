@@ -12,19 +12,17 @@ public:
 };
 
 //Utility class for faster intersections, not actual cuboid
-class CuboidAA : public GeometryPrimitive {
+class CuboidAA {
 public:
 	Vector a;
 	Vector b;
 
-	CuboidAA();
+	CuboidAA() = default;
 	CuboidAA(Vector a, Vector b);
 
 	//Checks only fact of collision
-	virtual IntersectData intersect(const Line & line) override;
+	IntersectData intersect(const Line & line);
 	IntersectData intersect(const CuboidAA& cuboid);
-
-	virtual void precalc() override;
 };
 
 class TriangleMesh : public GeometryPrimitive {
@@ -41,6 +39,8 @@ public:
 	virtual IntersectData intersect(const Line& line) override;
 
 	virtual void precalc() override;
+
+	virtual void initFromNode(const XML::Node* node) override;
 };
 
 struct Face {
@@ -84,4 +84,6 @@ public:
 	void createCuboid(double x, double y, double z);
 
 	virtual void precalc() override;
+
+	virtual void initFromNode(const XML::Node* node) override;
 };

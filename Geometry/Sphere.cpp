@@ -42,3 +42,11 @@ IntersectData Sphere::intersect(const Line & line) {
 
 void Sphere::precalc() {
 }
+
+void Sphere::initFromNode(const XML::Node* node) {
+	GeometryPrimitive::initFromNode(node);
+	center.x = node->attrd("centerX");
+	center.y = node->attrd("centerY");
+	center.z = node->attrd("centerZ");
+	r = node->attrd("r");
+}

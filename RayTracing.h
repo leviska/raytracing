@@ -1,5 +1,5 @@
 #pragma once
-#include "Image.h"
+#include "Utils/Image.h"
 #include "Geometry.h"
 
 #include <vector>
@@ -20,11 +20,14 @@ struct Camera {
 	double width;
 	double height;
 
+	int antialiasing;
+
 	Camera() : center(), dir() {
 		resWidth = 0;
 		resHeight = 0;
 		width = 0;
 		height = 0;
+		antialiasing = 1;
 	}
 };
 
@@ -37,7 +40,6 @@ public:
 	std::vector<GeometryPrimitive*> objects;
 	std::vector<Vector> lights;
 	Camera camera;
-	int antialiasing;
 
 	RayTracing();
 	Image rayTracing();
